@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-export default class Game extends Component {
+class Game extends Component {
     render() {
         return (
             <div className="container">
@@ -9,3 +9,7 @@ export default class Game extends Component {
         )
     }
 }
+
+// use bootstrap card
+
+export default Game;

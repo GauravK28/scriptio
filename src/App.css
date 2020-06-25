@@ -2,16 +2,25 @@
   background-color: #88ff66;
 }
 
-div.container {
+div.page {
   margin: auto;
   margin-top: 20px;
   margin-bottom: 20px;
   padding: 0;
   width: auto;
 }
+
+div.nav-box {
+  margin: auto;
+  display: flex;
+  max-width: 500px;
+}
+
+
+
 .navbar {
 
-  box-shadow: 0 4px 3px -3px rgb(199, 199, 199);
+  box-shadow: 0 3px 3px -3px rgb(199, 199, 199);
 
   /* the rest of your styling */
 }
