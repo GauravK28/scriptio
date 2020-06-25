@@ -54,9 +54,6 @@ class App extends Component {
         <Route exact path="/settings">
           <Settings />
         </Route>
-        <Route exact path="/login">
-          <Login showModal={true} />
-        </Route>
         {/* <Route path="/"  exact component={Home} />
           <Route path="/practice" component={Practice} />
           <Route path="/profile" component={Profile} />

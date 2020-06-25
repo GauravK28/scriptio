@@ -4,7 +4,9 @@ class Profile extends Component {
     render() {
         return (
             <div className="container">
-                <p>My Profile</p>
+                <div className="card-container">
+                    <p>My Profile</p>
+                </div>
             </div>
         )
     }

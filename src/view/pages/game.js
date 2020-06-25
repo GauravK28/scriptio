@@ -4,7 +4,10 @@ class Game extends Component {
     render() {
         return (
             <div className="container">
-                <p>Game</p>
+                <div className="card-container">
+                    <p>Game</p>
+
+                </div>
             </div>
         )
     }
