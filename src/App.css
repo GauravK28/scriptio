@@ -34,10 +34,27 @@ div.card-container {
 
 /** Game prompt styling */
 div.prompt-container {
+  padding: 7px;
   width: 100%;
-  height: 100px;
+  height: auto;
   border: #88ff66;
   background-color: white;
   border-radius: 5px;
-  display: f;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Character styling */
+a.character {
+  width: auto;
+  height: auto;
+  font-family: Arial,serif;
+  font-size: 26px;
+}
+
+a.character-space {
+  width: 0.25em;
+  height: auto;
+  font-family: Arial,serif;
+  font-size: 26px;
 }
