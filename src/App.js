@@ -85,3 +85,6 @@ export default App;
 
 //shift + alt + F
 // import "bootstrap/dist/css/bootstrap.min.css";
+
+
+// Marathon mode, see how long you can type above a certain words per minute
