@@ -44,17 +44,27 @@ div.prompt-container {
   flex-wrap: wrap;
 }
 
-/* Character styling */
-a.character {
+/* Prompt styling */
+
+span.word {
+  width: auto;
+  height: auto;
+  font-family: Arial,serif;
+  font-size: 26px;
+  padding-top: 3px;
+}
+
+
+span.character {
   width: auto;
   height: auto;
   font-family: Arial,serif;
   font-size: 26px;
 }
-
-a.character-space {
-  width: 0.25em;
+span.space-character {
+  width: 14.47px;
   height: auto;
   font-family: Arial,serif;
   font-size: 26px;
+
 }
