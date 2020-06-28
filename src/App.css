@@ -47,6 +47,16 @@ div.prompt-container {
   display: flex;
   flex-wrap: wrap;
 }
+
+p.WPM {
+  float: right;
+  font-size: 26px;
+}
+
+p.timer {
+  float: left;
+  font-size: 26px;
+}
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 

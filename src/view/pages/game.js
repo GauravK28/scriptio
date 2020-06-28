@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { InputGroup, FormControl } from 'react-bootstrap';
+const ms = require('pretty-ms');
 
 
 
@@ -10,69 +11,121 @@ class Game extends Component {
             quote: "Listen carefully, my friend. You are stuck in a paradox. It turns out there are three things you cannot do in virtual reality. You cannot die, you cannot get grounded, and you cannot call customer service. This is why you are having problems.",
             rawInput: React.createRef(),
             prompt: [],
-            textInput: ""
+            textInput: "",
+            correctChars: 0,
+            isStarted: false,
+            isFinished: false,
+
+
+            timerOn: false,
+            timerStart: 0,
+            timerTime: 0,
+            thing: 0,
         }
 
         var words = this.state.quote.split(" ");
-        // for (var i = 0; i < words.length; i++) {
-        //     this.state.prompt.push(<Word value={words[i]} key={i}/>)
-        // }
+
         for (let i = 0; i < words.length; i++) {
             this.state.prompt.push({
                 word: words[i],
-                className: "word",   // "word" or "word current"
+                styling: "word",
                 characters: function () {
                     var elem = [];
                     for (let j = 0; j < this.word.length; j++) {
                         elem.push({
                             character: this.word.charAt(j),
-                            className: "character", // "character", "character cor", "character inc"
+                            styling: "character",
                         })
                     }
                     elem.push({
                         character: " ",
-                        className: "character",
+                        styling: "character",
                     })
                     return elem;
                 },
             })
         }
 
-        /* need to rework setup,
-            the arrays should onyl contain the words and characters
-            the spans should be added with a map, 
-            and if a letter matches, pass a prop
-
-            using Array map for rendering
-            http://www.hackingwithreact.com/read/1/13/rendering-an-array-of-data-with-map-and-jsx 
-
-            dealing with "active" state
-            https://stackoverflow.com/questions/41978408/changing-style-of-a-button-on-click 
-            https://codepen.io/anon/pen/mepogj?editors=0010 
-
-            maybe make an object called word, and map that to an array, 
-            then the word object has the characters
-                possibly useful to keep track of current word
-        */
+        for (let i = 0; i < this.state.prompt.length; i++) {
+            var temp = this.state.prompt[i].characters();
+            this.state.prompt[i].characters = temp;
+        }
+        
+        this.startTimer();
     }
 
+    startTimer = () => {
+        this.setState({
+            timerOn: true,
+            timerTime: this.state.timerTime,
+            timerStart: Date.now() - this.state.timerTime
+        });
+        this.timer = setInterval(() => {
+            this.setState({
+                timerTime: Date.now() - this.state.timerStart
+            });
+        }, 10);
+    };
+
     handleChange() {
+        var corCharCnt = 0;
+
+        let temp = this.state.rawInput.current.value;
+
+        if (temp.size == 1) {
+            this.setState({
+                isStarted: true,
+            });
+        }
+
+
+        var testChar = "";
+        var corChar = "";
+        var index = 0;
+        var tempPrompt = this.state.prompt.slice();
+
+        for (let i = 0; i < tempPrompt.length; i++) {
+            var characters = tempPrompt[i].characters;
+            for (let j = 0; j < characters.length; j++) {
+                corChar = characters[j].character;
+                testChar = temp.charAt(index);
+
+                if (testChar === "") {
+                    tempPrompt[i].characters[j].styling = "character";
+                } else if (testChar == corChar) {
+                    tempPrompt[i].characters[j].styling = "character correct";
+                    corCharCnt++;
+                }
+                else if (testChar != corChar) {
+                    tempPrompt[i].characters[j].styling = "character incorrect";
+                }
+
+                index++;
+            }
+        }
+
         this.setState({
             textInput: this.state.rawInput.current.value,
+            prompt: tempPrompt,
+            correctChars: corCharCnt,
         });
     }
 
     render() {
-
+        let minutes = ("0" + (Math.floor(this.state.timerTime / 60000) % 60)).slice(-2);
+        let seconds = ("0" + (Math.floor(this.state.timerTime / 1000) % 60)).slice(-2);
+        let wpm = Math.round((this.state.correctChars / 5)/(seconds/60));
         return (
             <div className="container">
                 <div className="card-container">
-                    <p>Gæm</p>
+                    <p className="timer">Timer: {minutes}:{seconds}</p>
+                    <p className="WPM">WPM: {wpm}</p>
+
                     <div className="prompt-container">
                         {this.state.prompt.map((word, index) => (
-                            <span className={word.className}>
-                                {word.characters().map((character, index2) => (
-                                    <span className={character.className}>{character.character}</span>
+                            <span className={word.styling}>
+                                {word.characters.map((character, index2) => (
+                                    <span className={character.styling}>{character.character}</span>
                                 ))}
                             </span>
                         ))}
@@ -81,7 +134,7 @@ class Game extends Component {
                     <br></br>
                     <div className="user-input">
                         <InputGroup size="lg">
-                            <FormControl aria-label="Large" aria-describedby="inputGroup-sizing-sm"
+                            <FormControl autoFocus aria-label="Large" aria-describedby="inputGroup-sizing-sm"
                                 placeholder="Start typing..."
                                 ref={this.state.rawInput} type="text" onChange={() => this.handleChange()} />
                         </InputGroup>
@@ -92,32 +145,6 @@ class Game extends Component {
             </div>
         )
     }
-}
-
-const Word = (props) => {
-    var characters = [];
-    for (var i = 0; i < props.value.length; i++) {
-        characters.push(<Character value={props.value.charAt(i)} key={i} />);
-    }
-    characters.push(<Character value={" "} />)
-    return (
-        <>
-            <span className="word">
-                {characters}
-            </span>
-        </>
-    )
-}
-
-const Character = (props) => {
-    // if (props.value === " ") {
-    //     return (
-    //         <span className="character">&nbsp;</span>
-    //     )
-    // }
-    return (
-        <span className="character">{props.value}</span>
-    )
 }
 
 // style current word (grayish bar at top)
