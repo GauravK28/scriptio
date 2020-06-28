@@ -14,10 +14,30 @@ class Game extends Component {
         }
 
         var words = this.state.quote.split(" ");
-        for (var i = 0; i < words.length; i++) {
-            this.state.prompt.push(<Word value={words[i]} key={i}/>)
+        // for (var i = 0; i < words.length; i++) {
+        //     this.state.prompt.push(<Word value={words[i]} key={i}/>)
+        // }
+        for (let i = 0; i < words.length; i++) {
+            this.state.prompt.push({
+                word: words[i],
+                className: "word",   // "word" or "word current"
+                characters: function () {
+                    var elem = [];
+                    for (let j = 0; j < this.word.length; j++) {
+                        elem.push({
+                            character: this.word.charAt(j),
+                            className: "character", // "character", "character cor", "character inc"
+                        })
+                    }
+                    elem.push({
+                        character: " ",
+                        className: "character",
+                    })
+                    return elem;
+                },
+            })
         }
-        
+
         /* need to rework setup,
             the arrays should onyl contain the words and characters
             the spans should be added with a map, 
@@ -40,7 +60,7 @@ class Game extends Component {
         this.setState({
             textInput: this.state.rawInput.current.value,
         });
-     }
+    }
 
     render() {
 
@@ -49,7 +69,13 @@ class Game extends Component {
                 <div className="card-container">
                     <p>Gæm</p>
                     <div className="prompt-container">
-                        {this.state.prompt}
+                        {this.state.prompt.map((word, index) => (
+                            <span className={word.className}>
+                                {word.characters().map((character, index2) => (
+                                    <span className={character.className}>{character.character}</span>
+                                ))}
+                            </span>
+                        ))}
                     </div>
                     <br></br>
                     <br></br>
@@ -84,11 +110,11 @@ const Word = (props) => {
 }
 
 const Character = (props) => {
-    if (props.value === " ") {
-        return (
-            <span className="character">&nbsp;</span>
-        )
-    }
+    // if (props.value === " ") {
+    //     return (
+    //         <span className="character">&nbsp;</span>
+    //     )
+    // }
     return (
         <span className="character">{props.value}</span>
     )

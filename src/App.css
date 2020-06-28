@@ -74,7 +74,9 @@ span.character {
   height: auto;
   margin-left: 1px;
   margin-right: 1px;
+  white-space: break-spaces;
   
+  /* outline: 1px solid white */
 }
 
 span.character.correct  {
