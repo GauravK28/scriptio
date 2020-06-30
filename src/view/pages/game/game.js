@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { InputGroup, FormControl } from 'react-bootstrap';
-const ms = require('pretty-ms');
-
+import { InputGroup, FormControl, Button } from 'react-bootstrap';
+import Timer from "./timer"
 
 
 class Game extends Component {
@@ -12,15 +11,13 @@ class Game extends Component {
             rawInput: React.createRef(),
             prompt: [],
             textInput: "",
+
             correctChars: 0,
+            errorCnt: 0,
+
             isStarted: false,
             isFinished: false,
 
-
-            timerOn: false,
-            timerStart: 0,
-            timerTime: 0,
-            thing: 0,
         }
 
         var words = this.state.quote.split(" ");
@@ -46,30 +43,18 @@ class Game extends Component {
             })
         }
 
+        // to eliminate character() function & to store as array instead
         for (let i = 0; i < this.state.prompt.length; i++) {
             var temp = this.state.prompt[i].characters();
             this.state.prompt[i].characters = temp;
         }
         
-        this.startTimer();
+        
     }
-
-    startTimer = () => {
-        this.setState({
-            timerOn: true,
-            timerTime: this.state.timerTime,
-            timerStart: Date.now() - this.state.timerTime
-        });
-        this.timer = setInterval(() => {
-            this.setState({
-                timerTime: Date.now() - this.state.timerStart
-            });
-        }, 10);
-    };
 
     handleChange() {
         var corCharCnt = 0;
-
+        var incCharCnt = 0;
         let temp = this.state.rawInput.current.value;
 
         if (temp.size == 1) {
@@ -77,7 +62,6 @@ class Game extends Component {
                 isStarted: true,
             });
         }
-
 
         var testChar = "";
         var corChar = "";
@@ -98,8 +82,8 @@ class Game extends Component {
                 }
                 else if (testChar != corChar) {
                     tempPrompt[i].characters[j].styling = "character incorrect";
+                    incCharCnt++;
                 }
-
                 index++;
             }
         }
@@ -108,19 +92,22 @@ class Game extends Component {
             textInput: this.state.rawInput.current.value,
             prompt: tempPrompt,
             correctChars: corCharCnt,
+            errorCnt: incCharCnt,
+        });
+    }
+
+    startGame() {
+        this.setState({
+            isStarted: true,
+
         });
     }
 
     render() {
-        let minutes = ("0" + (Math.floor(this.state.timerTime / 60000) % 60)).slice(-2);
-        let seconds = ("0" + (Math.floor(this.state.timerTime / 1000) % 60)).slice(-2);
-        let wpm = Math.round((this.state.correctChars / 5)/(seconds/60));
         return (
             <div className="container">
                 <div className="card-container">
-                    <p className="timer">Timer: {minutes}:{seconds}</p>
-                    <p className="WPM">WPM: {wpm}</p>
-
+                    <Timer />
                     <div className="prompt-container">
                         {this.state.prompt.map((word, index) => (
                             <span className={word.styling}>
@@ -139,6 +126,7 @@ class Game extends Component {
                                 ref={this.state.rawInput} type="text" onChange={() => this.handleChange()} />
                         </InputGroup>
                     </div>
+                    <Button variant="primary" onClick={() => this.startGame()}>Start </Button>
                     <br></br>
                     <span>{this.state.textInput}</span>
                 </div>

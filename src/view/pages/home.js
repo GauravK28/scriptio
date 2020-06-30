@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { Button } from 'react-bootstrap';
-import Game from "./game";
+import Game from "./game/game";
 
 
 class Home extends Component {
