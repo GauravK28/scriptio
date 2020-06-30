@@ -36,7 +36,7 @@ div.card-container {
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 
-/** Game prompt styling */
+/** Game display/stats styling */
 div.prompt-container {
   padding: 7px;
   width: 100%;
@@ -56,6 +56,11 @@ p.WPM {
 p.timer {
   float: left;
   font-size: 26px;
+}
+
+div.filler {
+  font-size: 26px;
+  color: rgb(233, 233, 233);
 }
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -102,7 +107,9 @@ span.character.incorrect {
 }
 
 span.character.current {
-  border-bottom: 1px solid dodgerblue;
+  border-radius: 0px;
+  border-top: 0px;
+  border-bottom: 2px solid dodgerblue;
 }
 
 

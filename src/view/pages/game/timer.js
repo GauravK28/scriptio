@@ -8,11 +8,11 @@ class Timer extends Component {
             timerStart: 0,
             timerTime: 0,
 
-            correctChars: props.correctChars,
-            errorsCnt: props.errorsCnt,
+            correctChars: props.corChars,
+            errorsCnt: props.errorCnt,
 
-            isStarted: props.isStarted,
-            isFinished: props.isFinished,
+            isStarted: props.isGameStarted,
+            isFinished: props.isGameFinished,
         }
         this.startTimer();
     }
@@ -37,8 +37,8 @@ class Timer extends Component {
         // let wpm = Math.round((this.state.correctChars / 5)/(elapsedSec/ 10 /60));
         return (
             <>
-                {/* <p className="timer">Timer: {minutes}:{seconds} and {elapsedSec}</p>
-                <p className="WPM">WPM: {wpm}</p> */}
+                <p className="timer">Timer: {this.state.timerTime}</p>
+                {/* <p className="WPM">WPM: {wpm}</p> */}
             </>
         )
     }

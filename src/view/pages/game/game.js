@@ -17,7 +17,6 @@ class Game extends Component {
 
             isStarted: false,
             isFinished: false,
-
         }
 
         var words = this.state.quote.split(" ");
@@ -48,8 +47,8 @@ class Game extends Component {
             var temp = this.state.prompt[i].characters();
             this.state.prompt[i].characters = temp;
         }
-        
-        
+        this.state.prompt[this.state.prompt.length - 1].characters.pop();
+
     }
 
     handleChange() {
@@ -57,7 +56,7 @@ class Game extends Component {
         var incCharCnt = 0;
         let temp = this.state.rawInput.current.value;
 
-        if (temp.size == 1) {
+        if (temp.size === 1) {
             this.setState({
                 isStarted: true,
             });
@@ -76,13 +75,17 @@ class Game extends Component {
 
                 if (testChar === "") {
                     tempPrompt[i].characters[j].styling = "character";
-                } else if (testChar == corChar) {
+                } else if (testChar === corChar) {
                     tempPrompt[i].characters[j].styling = "character correct";
                     corCharCnt++;
                 }
-                else if (testChar != corChar) {
+                else if (testChar !== corChar) {
                     tempPrompt[i].characters[j].styling = "character incorrect";
                     incCharCnt++;
+                }
+
+                if (index === temp.length) {
+                    tempPrompt[i].characters[j].styling = "character current";
                 }
                 index++;
             }
@@ -97,9 +100,11 @@ class Game extends Component {
     }
 
     startGame() {
+        var tempPrompt = this.state.prompt.slice();
+        tempPrompt[0].characters[0].styling = "character current";
         this.setState({
             isStarted: true,
-
+            prompt: tempPrompt,
         });
     }
 
@@ -107,7 +112,16 @@ class Game extends Component {
         return (
             <div className="container">
                 <div className="card-container">
-                    <Timer />
+
+                    {this.state.isStarted ?
+                        <Timer
+                            corChars={this.state.correctChars}
+                            errorCnt={this.state.errorCnt}
+                            isGameStarted={this.state.isStarted}
+                            isGameFinished={this.state.isFinished}
+                        /> : <div className="filler">T</div>
+                    }
+
                     <div className="prompt-container">
                         {this.state.prompt.map((word, index) => (
                             <span className={word.styling}>
@@ -120,15 +134,17 @@ class Game extends Component {
                     <br></br>
                     <br></br>
                     <div className="user-input">
-                        <InputGroup size="lg">
-                            <FormControl autoFocus aria-label="Large" aria-describedby="inputGroup-sizing-sm"
-                                placeholder="Start typing..."
-                                ref={this.state.rawInput} type="text" onChange={() => this.handleChange()} />
-                        </InputGroup>
+                    {!this.state.isStarted ?
+                        <Button classname="" size="lg" block variant="primary" onClick={() => this.startGame()}>Start </Button> :
+                            <InputGroup size="lg">
+                                <FormControl autoFocus aria-label="Large" aria-describedby="inputGroup-sizing-sm"
+                                    placeholder="Start typing..."
+                                    ref={this.state.rawInput} type="text" onChange={() => this.handleChange()} />
+                            </InputGroup>
+                        
+                    }
                     </div>
-                    <Button variant="primary" onClick={() => this.startGame()}>Start </Button>
                     <br></br>
-                    <span>{this.state.textInput}</span>
                 </div>
             </div>
         )
