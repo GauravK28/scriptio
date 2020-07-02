@@ -17,6 +17,9 @@ class Game extends Component {
 
             isStarted: false,
             isFinished: false,
+
+            // use this to get the initial state to reset the game
+            // https://stackoverflow.com/questions/45200535/reset-initial-state-in-react-es6/45200755 
         }
 
         var words = this.state.quote.split(" ");
@@ -113,13 +116,11 @@ class Game extends Component {
             <div className="container">
                 <div className="card-container">
 
-                    {this.state.isStarted ?
-                        <Timer
+                    {this.state.isStarted ? <Timer
                             corChars={this.state.correctChars}
                             errorCnt={this.state.errorCnt}
                             isGameStarted={this.state.isStarted}
-                            isGameFinished={this.state.isFinished}
-                        /> : <div className="filler">T</div>
+                            isGameFinished={this.state.isFinished}/> : <div className="filler">T</div>
                     }
 
                     <div className="prompt-container">
@@ -135,7 +136,7 @@ class Game extends Component {
                     <br></br>
                     <div className="user-input">
                     {!this.state.isStarted ?
-                        <Button classname="" size="lg" block variant="primary" onClick={() => this.startGame()}>Start </Button> :
+                        <Button className="" size="lg" block variant="primary" onClick={() => this.startGame()}>Start </Button> :
                             <InputGroup size="lg">
                                 <FormControl autoFocus aria-label="Large" aria-describedby="inputGroup-sizing-sm"
                                     placeholder="Start typing..."
