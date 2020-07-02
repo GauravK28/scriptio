@@ -58,7 +58,7 @@ p.timer {
   font-size: 26px;
 }
 
-div.filler {
+p.filler {
   font-size: 26px;
   color: rgb(233, 233, 233);
 }
@@ -77,7 +77,7 @@ span.word {
   
 }
 
-span.word .current {
+span.word.current {
   border-radius: 4px;
   border-top: 2px solid rgb(175, 171, 171);
   

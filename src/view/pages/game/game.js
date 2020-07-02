@@ -51,7 +51,6 @@ class Game extends Component {
             this.state.prompt[i].characters = temp;
         }
         this.state.prompt[this.state.prompt.length - 1].characters.pop();
-
     }
 
     handleChange() {
@@ -71,6 +70,7 @@ class Game extends Component {
         var tempPrompt = this.state.prompt.slice();
 
         for (let i = 0; i < tempPrompt.length; i++) {
+            tempPrompt[i].styling  = "word";
             var characters = tempPrompt[i].characters;
             for (let j = 0; j < characters.length; j++) {
                 corChar = characters[j].character;
@@ -89,6 +89,7 @@ class Game extends Component {
 
                 if (index === temp.length) {
                     tempPrompt[i].characters[j].styling = "character current";
+                    tempPrompt[i].styling = "word current"
                 }
                 index++;
             }
@@ -112,6 +113,8 @@ class Game extends Component {
     startGame() {
         var tempPrompt = this.state.prompt.slice();
         tempPrompt[0].characters[0].styling = "character current";
+        tempPrompt[0].styling = "word current";
+
         this.setState({
             isStarted: true,
             prompt: tempPrompt,
@@ -126,7 +129,7 @@ class Game extends Component {
                         corChars={this.state.correctChars}
                         errorCnt={this.state.errorCnt}
                         isGameStarted={this.state.isStarted}
-                        isGameFinished={this.state.isFinished} /> : <div className="filler">T</div>
+                        isGameFinished={this.state.isFinished} /> : <p className="filler">T</p>
                     }
 
                     <div className="prompt-container">
@@ -142,7 +145,8 @@ class Game extends Component {
                     <br></br>
                     <div className="user-input">
                         {!this.state.isStarted ?
-                            <Button className="" size="lg" block variant="primary" onClick={() => this.startGame()}>Start </Button> :
+                            <Button className="" size="lg" block variant="primary" onClick={() => this.startGame()}>Start </Button> 
+                            :
                             <InputGroup size="lg">
                                 <FormControl readOnly={this.state.isFinished}
                                     autoFocus aria-label="Large" aria-describedby="inputGroup-sizing-sm"
