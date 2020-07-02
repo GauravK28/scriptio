@@ -15,6 +15,24 @@ class Timer extends Component {
             isFinished: props.isGameFinished,
         }
     }
+    
+    componentWillReceiveProps(nextProps) {
+        if (this.props != nextProps) {
+            this.setState({
+                correctChars: nextProps.corChars,
+                errorsCnt: nextProps.errorCnt,
+
+                isStarted: nextProps.isGameStarted,
+                isFinished: nextProps.isGameFinished,
+            });
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.isGameFinished !== prevProps.isGameFinished) {
+            this.stopTimer();
+        }
+      }
 
     componentWillMount() {
         this.startTimer();
@@ -22,26 +40,36 @@ class Timer extends Component {
 
     startTimer = () => {
         this.setState({
-          timerOn: true,
-          timerTime: this.state.timerTime,
-          timerStart: Date.now() - this.state.timerTime
+            timerOn: true,
+            timerTime: this.state.timerTime,
+            timerStart: Date.now() - this.state.timerTime
         });
         this.timer = setInterval(() => {
-          this.setState({
-            timerTime: Date.now() - this.state.timerStart
-          });
+            this.setState({
+                timerTime: Date.now() - this.state.timerStart
+            });
         }, 10);
+    };
+
+    stopTimer = () => {
+        this.setState({ timerOn: false });
+        clearInterval(this.timer);
+      };
+      resetTimer = () => {
+        this.setState({
+          timerStart: 0,
+          timerTime: 0
+        });
       };
 
     render() {
-        // let minutes = ("0" + (Math.floor(this.state.timerTime / 60000) % 60)).slice(-2);
-        // let seconds = ("0" + (Math.floor(this.state.timerTime / 1000) % 60)).slice(-2);
-        // let elapsedSec = (Math.floor(this.state.timerTime / 1000));
-        // let wpm = Math.round((this.state.correctChars / 5)/(elapsedSec/ 10 /60));
+        let minutes = Math.floor(this.state.timerTime/(1000*60))%60 
+        let seconds = Math.floor(this.state.timerTime/1000)%60
+        let wpm = Math.round((this.state.correctChars / 5) / (this.state.timerTime / 1000 / 60));
         return (
             <>
-                <p className="timer">Timer: {this.state.timerTime}  {this.state.timerStart}</p>
-                {/* <p className="WPM">WPM: {wpm}</p> */}
+                <p className="timer">Timer: {minutes < 10 ?  '0' + minutes : minutes}:{seconds < 10 ? '0' + seconds : seconds} </p>
+                <p className="WPM">WPM: {wpm}</p>
             </>
         )
     }

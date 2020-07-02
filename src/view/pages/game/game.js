@@ -7,7 +7,7 @@ class Game extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            quote: "Listen carefully, my friend. You are stuck in a paradox. It turns out there are three things you cannot do in virtual reality. You cannot die, you cannot get grounded, and you cannot call customer service. This is why you are having problems.",
+            quote: "Listen carefully, my friend. You are stuck in a paradox.",
             rawInput: React.createRef(),
             prompt: [],
             textInput: "",
@@ -94,11 +94,18 @@ class Game extends Component {
             }
         }
 
+        var finished = false;
+        if (corCharCnt === this.state.quote.length) {
+            finished = true;
+            console.log("game finished");
+        }
+
         this.setState({
             textInput: this.state.rawInput.current.value,
             prompt: tempPrompt,
             correctChars: corCharCnt,
             errorCnt: incCharCnt,
+            isFinished: finished,
         });
     }
 
@@ -115,12 +122,11 @@ class Game extends Component {
         return (
             <div className="container">
                 <div className="card-container">
-
                     {this.state.isStarted ? <Timer
-                            corChars={this.state.correctChars}
-                            errorCnt={this.state.errorCnt}
-                            isGameStarted={this.state.isStarted}
-                            isGameFinished={this.state.isFinished}/> : <div className="filler">T</div>
+                        corChars={this.state.correctChars}
+                        errorCnt={this.state.errorCnt}
+                        isGameStarted={this.state.isStarted}
+                        isGameFinished={this.state.isFinished} /> : <div className="filler">T</div>
                     }
 
                     <div className="prompt-container">
@@ -135,15 +141,16 @@ class Game extends Component {
                     <br></br>
                     <br></br>
                     <div className="user-input">
-                    {!this.state.isStarted ?
-                        <Button className="" size="lg" block variant="primary" onClick={() => this.startGame()}>Start </Button> :
+                        {!this.state.isStarted ?
+                            <Button className="" size="lg" block variant="primary" onClick={() => this.startGame()}>Start </Button> :
                             <InputGroup size="lg">
-                                <FormControl autoFocus aria-label="Large" aria-describedby="inputGroup-sizing-sm"
+                                <FormControl readOnly={this.state.isFinished}
+                                    autoFocus aria-label="Large" aria-describedby="inputGroup-sizing-sm"
                                     placeholder="Start typing..."
                                     ref={this.state.rawInput} type="text" onChange={() => this.handleChange()} />
                             </InputGroup>
-                        
-                    }
+
+                        }
                     </div>
                     <br></br>
                 </div>
@@ -156,6 +163,7 @@ class Game extends Component {
 // correct letters (green background highlight)
 // incorrect letters (red background highlight)
 // current letter (blue bar at bottom)
+//             quote: "Listen carefully, my friend. You are stuck in a paradox. It turns out there are three things you cannot do in virtual reality. You cannot die, you cannot get grounded, and you cannot call customer service. This is why you are having problems.",
 
 
 
