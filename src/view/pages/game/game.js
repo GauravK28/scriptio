@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { InputGroup, FormControl, Button } from 'react-bootstrap';
-import Timer from "./timer"
+import Timer from "./wpm"
+import CountDown from "./countdown";
 
 
 class Game extends Component {
@@ -18,6 +19,8 @@ class Game extends Component {
             isStarted: false,
             isFinished: false,
 
+            shouldCountDown: false,
+            countDownSec: 5,
             // use this to get the initial state to reset the game
             // https://stackoverflow.com/questions/45200535/reset-initial-state-in-react-es6/45200755 
         }
@@ -70,7 +73,7 @@ class Game extends Component {
         var tempPrompt = this.state.prompt.slice();
 
         for (let i = 0; i < tempPrompt.length; i++) {
-            tempPrompt[i].styling  = "word";
+            tempPrompt[i].styling = "word";
             var characters = tempPrompt[i].characters;
             for (let j = 0; j < characters.length; j++) {
                 corChar = characters[j].character;
@@ -110,6 +113,36 @@ class Game extends Component {
         });
     }
 
+    countDown(num) {
+        console.log(num);
+        this.setState({
+            countDownSec: num,
+        });
+        // if (num === 0) {
+        //     this.startGame();
+        // }
+        /*
+            need to figure out how to lift state up,
+            bc apparently this.startGame() doesn't work from countdown?
+        */
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        console.log(prevState.countDownSec);
+        console.log(this.state.countDownSec);
+        if (prevState.countDownSec !== this.state.countDownSec) {
+            if (this.state.countDownSec === 0) {
+                this.startGame();
+            }
+        }
+    }
+
+    handleCountDown() {
+        this.setState({
+            shouldCountDown: true,
+        });
+    }
+
     startGame() {
         var tempPrompt = this.state.prompt.slice();
         tempPrompt[0].characters[0].styling = "character current";
@@ -125,12 +158,16 @@ class Game extends Component {
         return (
             <div className="container">
                 <div className="card-container">
-                    {this.state.isStarted ? <Timer
-                        corChars={this.state.correctChars}
-                        errorCnt={this.state.errorCnt}
-                        isGameStarted={this.state.isStarted}
-                        isGameFinished={this.state.isFinished} /> : <p className="filler">T</p>
-                    }
+                    <div className="game-info">
+                        {this.state.isStarted ? <Timer
+                            corChars={this.state.correctChars}
+                            errorCnt={this.state.errorCnt}
+                            isGameStarted={this.state.isStarted}
+                            isGameFinished={this.state.isFinished}/>
+                            : <p className="filler">T</p>
+                        }
+                    </div>
+
 
                     <div className="prompt-container">
                         {this.state.prompt.map((word, index) => (
@@ -144,11 +181,11 @@ class Game extends Component {
                     <br></br>
                     <br></br>
                     <div className="user-input">
-                        {!this.state.isStarted ?
-                            <Button className="" size="lg" block variant="primary" onClick={() => this.startGame()}>Start </Button> 
+                        {!this.state.shouldCountDown ?
+                            <Button className="" size="lg" block variant="primary" onClick={() => this.handleCountDown()}>Start </Button>
                             :
                             <InputGroup size="lg">
-                                <FormControl readOnly={this.state.isFinished}
+                                <FormControl readOnly={this.state.isFinished || !this.state.isStarted}
                                     autoFocus aria-label="Large" aria-describedby="inputGroup-sizing-sm"
                                     placeholder="Start typing..."
                                     ref={this.state.rawInput} type="text" onChange={() => this.handleChange()} />
@@ -157,6 +194,8 @@ class Game extends Component {
                         }
                     </div>
                     <br></br>
+                    {this.state.shouldCountDown ? <CountDown countDownSec={this.state.countDownSec}
+                                                        countDownFn={this.countDown.bind(this)} /> : null}
                 </div>
             </div>
         )

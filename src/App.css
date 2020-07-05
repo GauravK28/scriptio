@@ -33,6 +33,23 @@ div.card-container {
   border-radius: 5px;
   background-color: rgb(233, 233, 233);
 }
+
+/* practice.js styling */
+h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+div.description {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+Button.StartPractice {
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
 
@@ -48,6 +65,10 @@ div.prompt-container {
   flex-wrap: wrap;
 }
 
+div.game-info {
+  text-align: center;
+}
+
 p.WPM {
   float: right;
   font-size: 26px;
@@ -56,6 +77,16 @@ p.WPM {
 p.timer {
   float: left;
   font-size: 26px;
+}
+
+span.countdown {
+  color: red;
+  font-size: 26px;
+  font-weight: bold;
+  margin: auto;
+  display: inline-block;
+  margin-right: 100px;
+  
 }
 
 p.filler {
@@ -114,7 +145,6 @@ span.character.current {
 
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-
 
 /* User Input */
 div.user-input {
