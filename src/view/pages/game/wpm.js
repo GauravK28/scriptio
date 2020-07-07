@@ -17,9 +17,9 @@ class Timer extends Component {
             isFinished: props.isGameFinished,
         }
 
-        this.startTimer();
+        //this.startTimer();
     }
-    
+
     componentWillReceiveProps(nextProps) {
         if (this.props != nextProps) {
             this.setState({
@@ -39,11 +39,11 @@ class Timer extends Component {
         if (this.props.isGameFinished !== prevProps.isGameFinished) {
             this.stopTimer();
         }
-      }
+    }
 
-    // componentWillMount() {
-    //     this.startTimer();
-    // }
+    componentWillMount() {
+        this.startTimer();
+    }
 
     startTimer = () => {
         this.setState({
@@ -61,25 +61,23 @@ class Timer extends Component {
     stopTimer = () => {
         this.setState({ timerOn: false });
         clearInterval(this.timer);
-      };
-      resetTimer = () => {
+    };
+    resetTimer = () => {
         this.setState({
-          timerStart: 0,
-          timerTime: 0
+            timerStart: 0,
+            timerTime: 0
         });
-      };
+    };
 
     render() {
-        let minutes = Math.floor(this.state.timerTime/(1000*60))%60; 
-        let seconds = Math.floor(this.state.timerTime/1000)%60;
+
+        let minutes = Math.floor(this.state.timerTime / (1000 * 60)) % 60;
+        //console.log("minutes:" + minutes);
+        let seconds = Math.floor(this.state.timerTime / 1000) % 60;
         let wpm = Math.round((this.state.correctChars / 5) / (this.state.timerTime / 1000 / 60));
         return (
             <>
-                <p className="timer">Timer: {minutes < 10 ?  '0' + minutes : minutes}:{seconds < 10 ? '0' + seconds : seconds} </p>
-                
-                {/*implement countdown here, once zero, create function in game and pass down as props to wpm then
-                    to countdown, so countdown can notify game, when it hits zero, then game can update to isStarted,
-                    and timer can remove the Countdown */}
+                <p className="timer">Timer: {minutes < 10 ? '0' + minutes : minutes}:{seconds < 10 ? '0' + seconds : seconds} </p>
 
                 <p className="WPM">WPM: {wpm}</p>
             </>
@@ -87,3 +85,7 @@ class Timer extends Component {
     }
 }
 export default Timer;
+
+{/*implement countdown here, once zero, create function in game and pass down as props to wpm then
+                    to countdown, so countdown can notify game, when it hits zero, then game can update to isStarted,
+                    and timer can remove the Countdown */}

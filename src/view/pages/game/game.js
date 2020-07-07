@@ -19,6 +19,8 @@ class Game extends Component {
             isStarted: false,
             isFinished: false,
 
+            timerCntr: 0,
+
             shouldCountDown: false,
             countDownSec: 5,
             // use this to get the initial state to reset the game
@@ -140,6 +142,7 @@ class Game extends Component {
     handleCountDown() {
         this.setState({
             shouldCountDown: true,
+            timerCntr: this.state.timerCntr + 1,
         });
     }
 
@@ -155,6 +158,7 @@ class Game extends Component {
     }
 
     render() {
+        console.log(this.state.timerCntr);
         return (
             <div className="container">
                 <div className="card-container">
@@ -163,7 +167,8 @@ class Game extends Component {
                             corChars={this.state.correctChars}
                             errorCnt={this.state.errorCnt}
                             isGameStarted={this.state.isStarted}
-                            isGameFinished={this.state.isFinished}/>
+                            isGameFinished={this.state.isFinished}
+                            key={this.state.timerCntr}/>
                             : <p className="filler">T</p>
                         }
                     </div>
