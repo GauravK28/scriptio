@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link, } from 'react-router-dom';
+import { BrowserRouter as Router, Route, } from 'react-router-dom';
 
 import { Navbar, Nav,} from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap'
@@ -70,11 +70,6 @@ class App extends Component {
         <Route exact path="/settings">
           <Settings />
         </Route>
-
-        {/* <Route path="/"  exact component={Home} />
-          <Route path="/practice" component={Practice} />
-          <Route path="/profile" component={Profile} />
-          <Route path="/settings" component={Settings} /> */}
       </Router>
       
     );

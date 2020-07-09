@@ -55,11 +55,6 @@ class Practice extends Component {
         }
     }
 
-    // handleNextGame() {
-    //     this.setState({
-    //         nextGame: true,
-    //     });
-    // }
 
     render() {
         return (

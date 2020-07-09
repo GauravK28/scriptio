@@ -20,7 +20,7 @@ class LoginModal extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.props != nextProps) {
+        if (this.props !== nextProps) {
             this.setState({
                 shouldModalOpen: nextProps.shouldModalOpen,
             });
@@ -71,11 +71,5 @@ class LoginModal extends Component {
     }
 }
 
-
-
-{/* <p>Username</p>
-<p>Password</p>
-<p>Forgot username</p>
-<p>Forgot Passowrdf</p> */}
 
 export default LoginModal;
