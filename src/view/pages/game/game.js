@@ -163,10 +163,9 @@ class Game extends Component {
         let progress = Math.floor(100 *(this.state.correctChars + this.state.errorCnt) / this.state.quote.length);
         return (
             <div className="container">
-                {this.state.isStarted?  <div className="progress-container">
-                    <ProgressBar now={progress} label={`${progress}%`} />
+                {this.state.isStarted?  <div className="progress-container">{progress}%
+                    <ProgressBar now={progress} />
                 </div> : null}
-                
                 <div className="card-container">
                     <div className="game-info">
                         {this.state.isStarted ? <Timer
