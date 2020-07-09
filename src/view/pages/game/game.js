@@ -8,7 +8,8 @@ class Game extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            quote: "Listen carefully, my friend. You are stuck in a paradox.",
+            quoteObject: props.quote,
+            quote: props.quote.content,
             rawInput: React.createRef(),
             prompt: [],
             textInput: "",
@@ -19,10 +20,14 @@ class Game extends Component {
             isStarted: false,
             isFinished: false,
 
-            timerCntr: 0,
+            timerKey: 0,
 
             shouldCountDown: false,
-            countDownSec: 5,
+            countDownSec: 4,
+
+            wpm: -1,
+
+            status: props.status, // send game status to practice mode
             // use this to get the initial state to reset the game
             // https://stackoverflow.com/questions/45200535/reset-initial-state-in-react-es6/45200755 
         }
@@ -103,6 +108,7 @@ class Game extends Component {
         var finished = false;
         if (corCharCnt === this.state.quote.length) {
             finished = true;
+            this.state.status(finished);
             console.log("game finished");
         }
 
@@ -116,22 +122,12 @@ class Game extends Component {
     }
 
     countDown(num) {
-        console.log(num);
         this.setState({
             countDownSec: num,
         });
-        // if (num === 0) {
-        //     this.startGame();
-        // }
-        /*
-            need to figure out how to lift state up,
-            bc apparently this.startGame() doesn't work from countdown?
-        */
     }
 
     componentDidUpdate(prevProps, prevState) {
-        console.log(prevState.countDownSec);
-        console.log(this.state.countDownSec);
         if (prevState.countDownSec !== this.state.countDownSec) {
             if (this.state.countDownSec === 0) {
                 this.startGame();
@@ -142,7 +138,13 @@ class Game extends Component {
     handleCountDown() {
         this.setState({
             shouldCountDown: true,
-            timerCntr: this.state.timerCntr + 1,
+            timerCntr: this.state.timerKey + 1,
+        });
+    }
+
+    getWPM(num) {
+        this.setState({
+            wpm: num,
         });
     }
 
@@ -158,7 +160,6 @@ class Game extends Component {
     }
 
     render() {
-        console.log(this.state.timerCntr);
         return (
             <div className="container">
                 <div className="card-container">
@@ -168,7 +169,8 @@ class Game extends Component {
                             errorCnt={this.state.errorCnt}
                             isGameStarted={this.state.isStarted}
                             isGameFinished={this.state.isFinished}
-                            key={this.state.timerCntr}/>
+                            wpmFn={this.getWPM.bind(this)}
+                            key={this.state.timerKey} />
                             : <p className="filler">T</p>
                         }
                     </div>
@@ -199,9 +201,18 @@ class Game extends Component {
                         }
                     </div>
                     <br></br>
-                    {this.state.shouldCountDown ? <CountDown countDownSec={this.state.countDownSec}
-                                                        countDownFn={this.countDown.bind(this)} /> : null}
+                    <div className="countdown-container">
+                        {this.state.shouldCountDown && !this.state.isStarted ? <CountDown countDownSec={this.state.countDownSec}
+                            countDownFn={this.countDown.bind(this)} /> : null}
+                    </div>
+                    <div>{this.state.testing}</div>
                 </div>
+                {this.state.isFinished ? <div className="card-container">
+                    <h3>Game Review</h3>
+                    <h5>Quote:</h5>
+                    <p>"{this.state.quote}"</p>
+                    <p> - {this.state.quoteObject.author}</p>
+                </div> : null}
             </div>
         )
     }

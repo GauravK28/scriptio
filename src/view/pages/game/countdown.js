@@ -11,7 +11,6 @@ class CountDown extends Component {
 
             countDownFn: props.countDownFn,
         }
-        console.log("here?")
     }
 
     componentDidMount() {
