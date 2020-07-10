@@ -5,8 +5,12 @@ const socketio = require('socket.io');
 const mongoose = require('mongoose');
 
 
-const expressServer = app.listen(3001);
-const io = socketio(expressServer);
+const server = app.listen(3001, () => {
+    console.log("server is running on port", server.address().port);
+   });
+const io = socketio(server);
+
+const Game = require('./Models/Game');
 
 mongoose.connect('mongodb://localhost:27017/scriptio',
                     {useNewUrlParser: true, useUnifiedTopology: true},
