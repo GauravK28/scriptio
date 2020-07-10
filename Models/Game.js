@@ -21,4 +21,4 @@ const GameSchema = new mongoose.Schema({
     startTime : {type: Number}
 })
 
-modelNames.exports = mongoose.model('Game', GameSchema);
+module.exports = mongoose.model('Game', GameSchema);
