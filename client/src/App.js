@@ -3,10 +3,10 @@ import history from './history';
 import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import './App.css'; // CSS stylesheet
 
-import NavBar from "./view/navbar";
 import socket from './socketConfig';
 import CreateGame from './view/pages/multiplayer/createGame';
 
+import NavBar from "./view/navbar";
 import Home from "./view/pages/multiplayer/home";
 import Profile from "./view/pages/profile";
 import Practice from "./view/pages/practice";
@@ -17,19 +17,26 @@ function App() {
   useEffect(() => {
     socket.on('update-game', (game) => {
       console.log(game);
-      setGameState(game);
-      //history.pus
+      setGameState(game); // async event
     });
+    return () => {
+      socket.removeAllListeners();
+    }
   }, []);
+  useEffect(() => {
+    if (gameState._id !== "") {
+      history.push(`/game/${gameState._id}`);
+    }
+  }, [gameState._id]);
   return (
     <Router>
-      <NavBar history={history} />
-
+      <NavBar history={history} />B
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/practice" component={Practice} />
-        <Route exact path="/profile" component={Profile} />
-        <Route exact path="/settings" component={Settings} />
+        <Route path="/game/create" component={CreateGame} />
+        <Route path="/practice" component={Practice} />
+        <Route path="/profile" component={Profile} />
+        <Route path="/settings" component={Settings} />
       </Switch>
     </Router>
   )

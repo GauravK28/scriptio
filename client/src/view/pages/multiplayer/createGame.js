@@ -15,17 +15,22 @@ const CreateGame = props => {
     }
     return (
         <>
-            <h3>Create Game</h3>
-            <Form>
-                <Form.Group controlId="formBasicEmail">
-                    <Form.Label>Nickname</Form.Label>
-                    <Form.Control type="text" name="nickname" placeholder="Enter your nickname"
-                        onChange={onChange} />
-                    </Form.Group>
-                <Button variant="primary" type="submit" onClick={() => onSubmit()}>
-                    Submit
+            <div className="container">
+                <div className="card-container">
+                    <h3>Create Game</h3>
+                    <Form>
+                        <Form.Group controlId="formBasicEmail">
+                            <Form.Label>Nickname</Form.Label>
+                            <Form.Control type="text" name="nickname" placeholder="Enter your nickname"
+                                onChange={onChange} />
+                        </Form.Group>
+                        <Button variant="primary" type="submit" onClick={() => onSubmit()}>
+                            Submit
                  </Button>
-            </Form>
+                    </Form>
+                </div>
+
+            </div>
         </>
     )
 }
