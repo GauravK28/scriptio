@@ -1,32 +1,46 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 
-
 import socket from '../../../socketConfig';
 
+
+import {useHistory} from 'react-router-dom';
+
+
 const CreateGame = props => {
+    let history = useHistory();
+
     const [nickName, setNickName] = useState("");
+    const [valid, setValid] = useState(false);
     const onChange = e => {
         setNickName(e.target.value);
+        if (e.target.value.length !== 0) {
+            setNickName(e.target.value);
+            setValid(true);
+        } else {
+            setValid(false);
+        }
     }
     const onSubmit = e => {
         e.preventDefault();
+        console.log(nickName);
         socket.emit('create-game', nickName);
     }
+
     return (
         <>
             <div className="container">
                 <div className="card-container">
                     <h3>Create Game</h3>
                     <Form>
-                        <Form.Group controlId="formBasicEmail">
-                            <Form.Label>Nickname</Form.Label>
+                        <Form.Group controlId="formBasicName">
+                            <Form.Label>Nickname:</Form.Label>
                             <Form.Control type="text" name="nickname" placeholder="Enter your nickname"
-                                onChange={onChange} />
+                                onChange={onChange} maxLength={15} />
                         </Form.Group>
-                        <Button variant="primary" type="submit" onClick={() => onSubmit()}>
-                            Submit
-                 </Button>
+                        <Button disabled={!valid} variant="primary" type="submit" onClick={onSubmit}>
+                            Create Room
+                        </Button>
                     </Form>
                 </div>
 
