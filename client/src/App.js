@@ -1,39 +1,38 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, } from 'react-router-dom';
-import {Navbar, Nav} from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap'
+import React, { useEffect, useState } from 'react';
+import history from './history';
+import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import './App.css'; // CSS stylesheet
-
-import Home from "./view/pages/home";
-import Profile from "./view/pages/profile";
-import Practice from "./view/pages/practice";
-import Settings from "./view/pages/user-settings";
-import LoginModal from "./view/pages/loginModal";
 
 import NavBar from "./view/navbar";
 import socket from './socketConfig';
+import CreateGame from './view/pages/multiplayer/createGame';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      shouldLoginModalOpen: false,
-    }
-  }
+import Home from "./view/pages/multiplayer/home";
+import Profile from "./view/pages/profile";
+import Practice from "./view/pages/practice";
+import Settings from "./view/pages/user-settings";
 
-  handleModalOpen = () => {
-    this.setState((prevState) => {
-      return {
-        shouldLoginModalOpen: !prevState.shouldLoginModalOpen
-      }
-    })
-  }
+function App() {
+  const [gameState, setGameState] = useState({ _id: "", isOpen: false, players: [], words: [] });
+  useEffect(() => {
+    socket.on('update-game', (game) => {
+      console.log(game);
+      setGameState(game);
+      //history.pus
+    });
+  }, []);
+  return (
+    <Router>
+      <NavBar history={history} />
 
-  render() {
-    return (
-      <NavBar />
-    );
-  }
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/practice" component={Practice} />
+        <Route exact path="/profile" component={Profile} />
+        <Route exact path="/settings" component={Settings} />
+      </Switch>
+    </Router>
+  )
 }
 
 export default App;

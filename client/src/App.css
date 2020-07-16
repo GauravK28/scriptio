@@ -34,6 +34,10 @@ div.card-container {
   background-color: rgb(233, 233, 233);
 }
 
+Button.home {
+  margin: 10px;
+}
+
 /* practice.js styling */
 div.top-bar {
   display:inline-block;
