@@ -8,7 +8,7 @@ import {useHistory} from 'react-router-dom';
 
 
 const CreateGame = props => {
-    let history = useHistory();
+    // let history = useHistory();
 
     const [nickName, setNickName] = useState("");
     const [valid, setValid] = useState(false);
