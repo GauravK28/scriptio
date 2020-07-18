@@ -4,11 +4,7 @@ import { Button, Form } from 'react-bootstrap';
 import socket from '../../../socketConfig';
 
 
-import {useHistory} from 'react-router-dom';
-
-
 const CreateGame = props => {
-    // let history = useHistory();
 
     const [nickName, setNickName] = useState("");
     const [valid, setValid] = useState(false);

@@ -3,10 +3,6 @@ import { Button, Form } from 'react-bootstrap';
 
 import socket from '../../../socketConfig';
 
-
-import { useHistory } from 'react-router-dom';
-
-
 const JoinGame = props => {
     const [userInput, setUserInput] = useState({ gameID: "", nickName: "" });
     const onChange = e => {

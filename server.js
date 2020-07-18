@@ -26,9 +26,34 @@ const QuoteRequest = require('./QuotableAPI');
 io.on('connect', (socket) => {
     console.log("CONNECTED");
 
+    socket.on('timer', async ({gameID, playerID}) => {
+        let countDown = 5;
+        let game = await Game.findById(gameID);
+        let player = game.players.id(playerID);
+        if (player.isPartyLeader) {
+            let timerID = setInterval(async () => {
+                if (countDown >= 0) {
+                    io.to(gameID).emit('timer', {countDown, msg : "Starting Game"});
+                    countDown--;
+                } else {
+                    game.isOpen = false;
+                    await game.save((err) => {
+                        if (err) {
+                            return console.log(err);
+                        }
+                        console.log('Success!');
+                    });
+                    
+                    io.to(gameID).emit('update-game', game);
+                    startGameClock(gameID);
+                    clearInterval(timerID);
+                }
+            }, 1000);
+        }
+    });
+
     socket.on('join-game', async ({ gameID: _id, nickName }) => {
         try {
-            console.log("LOOK");
             Game.find((err, game) => {
                 if (err) {
                     return console.log(err);
@@ -36,10 +61,7 @@ io.on('connect', (socket) => {
                 console.log(game);
             });
 
-            console.log("going to join");
-            console.log(_id);
             let g = await Game.findById(_id).exec();
-            console.log(g);
 
             if (g.isOpen) {
                 const gameID = g._id.toString();
@@ -60,19 +82,12 @@ io.on('connect', (socket) => {
                 console.log("PLAYER JOINED");
             }
         } catch (error) {
-            console.log("here?");
             console.log(error);
-
         }
     });
 
     socket.on('create-game', async (nickName) => {
         try {
-            console.log("Testing to make sure it is connected");
-            mongoose.connection.on('error', function (err) {
-                console.error('MongoDB error: %s', err);
-            });
-
             const quotableData = await QuoteRequest();
 
             let game = new Game();
@@ -96,9 +111,65 @@ io.on('connect', (socket) => {
             socket.join(gameID);
             io.to(gameID).emit('update-game', game);
             console.log("GAME WAS CREATED");
-            console.log(game);
         } catch (error) {
             console.log(error);
         }
     });
 });
+
+
+const startGameClock = async (gameID) => {
+    let game = await Game.findById(gameID).exec();
+    game.startTime = new Date().getTime();
+    await game.save((err) => {
+        if (err) {
+            return console.log(err);
+        }
+        console.log('Success!');
+    });
+
+    let time = 120;
+    let timerID = setInterval(function gameIntervalFunc() {
+        if (time >= 0) {
+            const formatTime = calculateTime(time);
+            io.to(gameID).emit('timer', {countDown : formatTime, msg : "Timer Remaining"});
+            time--;
+        } else {
+            (async () => {
+                let endTime = new Date().getTime();
+                let game = await Game.findById(gameID);
+                let {startTime} = game;
+                game.isOver = true;
+                game.players.forEach((player, index) => {
+                    if (player.WPM === -1) {
+                        game.players[index].WPM = calculateWPM(endTime, startTime, player);
+                    }
+                });
+                await game.save((err) => {
+                    if (err) {
+                        return console.log(err);
+                    }
+                    console.log('Success!');
+                });
+                io.to(gameID).emit('update-game', game);
+                clearInterval(timerID);
+            })()
+        }
+        return gameIntervalFunc;
+    }, 1000);
+}
+
+const calculateTime = (time) => {
+    let minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+    return `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+
+}
+
+const calculateWPM = (endTime, startTime, player) => {
+    let numOfWords = player.currentWordIndex;
+    const timeInSeconds = (endTime - startTime) / 1000;
+    const timeInMinutes = timeInSeconds / 60;
+    const WPM = Math.floor(numOfWords / timeInMinutes);
+    return WPM;
+}

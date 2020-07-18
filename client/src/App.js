@@ -14,6 +14,8 @@ import socket from './socketConfig';
 import CreateGame from './view/pages/multiplayer/createGame';
 import JoinGame from './view/pages/multiplayer/joinGame';
 
+import GameEngine from './view/pages/multiplayer/GameEngine';
+
 function App() {
   const [gameState, setGameState] = useState({ _id: "", isOpen: false, players: [], words: [] });
 
@@ -40,6 +42,8 @@ function App() {
         <Route exact path="/" component={Home} />
         <Route path="/game/create" component={CreateGame} />
         <Route path="/game/join" component={JoinGame} />
+        <Route path="/game/:gameID" render={props => <GameEngine {...props } gameState={gameState}/>}/>
+
         <Route path="/practice" component={Practice} />
         <Route path="/profile" component={Profile} />
         <Route path="/settings" component={Settings} />
