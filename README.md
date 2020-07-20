@@ -1,19 +1,90 @@
-# Trackmania
+# Typemania
+**Author**: Gaurav Krishnan - [`gauravk2@illinois.edu`](mailto:example@illinois.edu)
 
-## Available Scripts
+## Project Goal
+This website is meant to create something similar to TypeRacer by providing a singleplayer and mutliplayer experience. Currently the mutliplayer only supports game room invite codes instead of search-based game creation. The website allows you to type race with other users you invite our play by yourself. This project mainly served as a tool for me to learn web development and how to use the MERN stack.
 
-#### npm start
-Run in production mode
+Note: Quotes are fetched from [Quotable API](https://github.com/lukePeavey/quotable).
+## Features
+ - Singleplayer Mode
+ - Multiplayer Mode (invite link method)
+ - Game Review that displays quote and author
 
-#### npm run dev
-Run the development server start script using nodemon
+---
 
-#### npm start
-Run the development react server start script
-Note: cd into client
+## Tech Stack
+ - React
+ - Node.js
+ - Express
+ - MongoDB
+ - Socketio
+ - QuotableAPI
+
+## Dependencies
+### Front End (client folder)
+ - React
+ - react-bootstrap
+ - react-router-dom
+ - react-router-bootstrap
+ - socket.io-client
+
+### Back End 
+- mongoose
+- express
+- socketio
+- dotenv
+- axios
+- cross-env
+- nodemon
+
+---
+## Installation / Setup
+- First install npm and node as they are required to run the application.
+
+- Now install all dependencies
+    > Install backend dependencies
+    ```shell
+    $ cd scriptio (or project directory)
+    $ npm install
+    ```
+    > Install front end dependencies
+    ```shell
+    $ cd client
+    $ npm install
+    ```
+- Setup database
+    -  Go to [mongoDB](https://www.mongodb.com/), create an account, and set up a free cluster.
+    - In this reposity the config.env files are .gitignored but you can create a .env file in the `config` folder and input the following
+    ```
+    PORT = <port number>
+    MONGO_URI = mongodb+srv://<username>:<password>@cluster0.xdldx.mongodb.net/<database name>?retryWrites=true&w=majority
+    ```
+    - Replace the port number with the port you want to run the server on.
+    - Replace the username & password with that from your mongodb database.
+    - The database name can be anything
+---
+
+## Local/Development Build
+### Changes
+ - Need to change socketio in client.
+    - Navigate to `socketConfig.js` in the `client` folder
+    - Replace the app url with the `PORT` number the server is running on.
+        - Note: the react server (NOT the node.js server) runs on port 3001 by default
+- Make sure the react server is running on a seperate port from the node.js server
+### Scripts
+ - For the server with `nodemon` run (from the main directory)
+    ```shell
+    $ npm run dev
+    ```
+- For the react build run
+    ```shell
+    $ cd client
+    $ npm start
+    ```
+## Production/Deployment Build
+ - If you followed up to this point and want to deploy, I used heroku to deploy this build.
+ - I recommend following this [youtube tutorial](https://www.youtube.com/watch?v=71wSzpLyW9k) as is it explained simply.
 
 
 
-### Deployment
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
