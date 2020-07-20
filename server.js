@@ -1,6 +1,7 @@
 // npm run dev
 const express = require('express');
 const dotenv = require('dotenv');
+const path = require('path');
 // Load config
 dotenv.config({path : './config/config.env'})
 
@@ -8,6 +9,17 @@ const app = express();
 
 const socketio = require('socket.io');
 const mongoose = require('mongoose');
+
+
+// serve static assets if in production
+if (process.env.NODE_ENV === 'production') {
+    // Set static folder
+    app.use(express.static('client/build'));
+    // Load build index html file
+    app.get('*', (req) => {
+        resizeBy.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    });
+}
 
 const PORT = process.env.PORT;
 const server = app.listen(PORT, () => {
