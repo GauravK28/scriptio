@@ -25,7 +25,7 @@ class NavBar extends Component {
     return (
       <Navbar bg="light" variant="light" >
         <div className="container">
-          <Navbar.Brand >Script.io</Navbar.Brand>
+          <Navbar.Brand >Typemania</Navbar.Brand>
           <Nav className="mr-auto">
             <LinkContainer to="/">
               <Nav.Link >Home</Nav.Link>

@@ -8,7 +8,7 @@ const Home = props => {
     return (
         <div className="container">
             <div className="card-container">
-                <h3>Welcome to Script.io</h3>
+                <h3>Welcome to Typemania</h3>
                 <div className="game-info">
                     <Button className="home" variant="primary"
                             onClick={() => history.push('game/create')}>Create Game </Button>
