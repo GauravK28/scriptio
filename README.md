@@ -2,6 +2,12 @@
 
 ## Available Scripts
 
+#### npm run dev
+Run the development server start script
+
+#### npm start
+Run the development react server start script
+Note: cd into client
 
 
 
