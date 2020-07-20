@@ -47,7 +47,7 @@ Note: Quotes are fetched from [Quotable API](https://github.com/lukePeavey/quota
     ```
 - Setup database
     -  Go to [mongoDB](https://www.mongodb.com/), create an account, and set up a free cluster.
-    - In this reposity the config.env files are .gitignored but you can create a .env file in the `config` folder and input the following
+    - In this repository the config.env files are .gitignored but you can create a .env file called `config.env` in the `config` folder and input the following
     ```
     PORT = <port number>
     MONGO_URI = <mongo_uri>
