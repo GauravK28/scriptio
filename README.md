@@ -21,22 +21,15 @@ Note: Quotes are fetched from [Quotable API](https://github.com/lukePeavey/quota
  - QuotableAPI
 
 ## Dependencies
-### Front End (client folder)
- - React
- - react-bootstrap
- - react-router-dom
- - react-router-bootstrap
- - socket.io-client
-
-### Back End 
-- mongoose
-- express
-- socketio
-- dotenv
-- axios
-- cross-env
-- nodemon
-
+| Back End  	| Front End (client folder) |
+|-----------	|------------------------	|
+| mongoose  	| React                  	|
+| express   	| react-bootstrap        	|
+| socketio  	| react-router-dom       	|
+| dotenv    	| react-router-bootstrap 	|
+| axios     	| socket.io-client       	|
+| cross-env 	|                        	|
+| nodemon   	|                        	|
 ---
 ## Installation / Setup
 - First install npm and node as they are required to run the application.
@@ -57,11 +50,12 @@ Note: Quotes are fetched from [Quotable API](https://github.com/lukePeavey/quota
     - In this reposity the config.env files are .gitignored but you can create a .env file in the `config` folder and input the following
     ```
     PORT = <port number>
-    MONGO_URI = mongodb+srv://<username>:<password>@cluster0.xdldx.mongodb.net/<database name>?retryWrites=true&w=majority
+    MONGO_URI = <mongo_uri>
     ```
-    - Replace the port number with the port you want to run the server on.
-    - Replace the username & password with that from your mongodb database.
-    - The database name can be anything
+    - Replace the <port number> with the port you want to run the server on.
+    - Replace <mongo_uri> with the link received from your Cluster dashboard on MongoDB by clicking "connect" then "Connect your application"
+    - You can replace "test" with whatever name you want for your database.
+    - Make sure to input your password.
 ---
 
 ## Local/Development Build
