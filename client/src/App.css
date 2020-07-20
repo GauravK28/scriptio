@@ -216,6 +216,7 @@ div.user-input {
   width: 50%;
   margin: auto;
   padding: 7px;
+  margin-top: 10px;
 }
 
 /* Countdown */
@@ -226,4 +227,18 @@ span.countdown {
   margin: auto;
   display: inline-block;
   font-size: 70px;
+}
+
+
+
+/* Game Review */
+div.game-review {
+  margin-top: 16px;
+  width: 100%;
+  height: auto;
+  border: #88ff66;
+  background-color: white;
+  border-radius: 5px;
+  display: flex;
+  flex-wrap: wrap;
 }

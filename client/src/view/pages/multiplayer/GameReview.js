@@ -13,30 +13,33 @@ const GameReview = ({ gameState }) => {
     return (
         <div className="card-container">
             <h2>Game Review</h2>
-            <h5>Quote:</h5>
+            <h5>Quote</h5>
             <p>"{gameState.quote}"</p>
             <p> - {gameState.author}</p>
             <br></br>
             <h5>Scoreboard</h5>
-            <Table striped bordered responsive>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Player</th>
-                        <th>WPM</th>
-                    </tr>
-                </thead>
-                <tbody> {
-                    scoreBoard.map((player, index) => {
-                        return <tr>
-                            <td>{index + 1}</td>
-                            <td>{player.nickName}</td>
-                            <td>{player.WPM}</td>
+
+            <div className="game-review">
+                <Table classname="review-table" striped bordered responsive>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Player</th>
+                            <th>WPM</th>
                         </tr>
-                    })
-                }
-                </tbody>
-            </Table>
+                    </thead>
+                    <tbody> {
+                        scoreBoard.map((player, index) => {
+                            return <tr>
+                                <td>{index + 1}</td>
+                                <td>{player.nickName}</td>
+                                <td>{player.WPM}</td>
+                            </tr>
+                        })
+                    }
+                    </tbody>
+                </Table>
+            </div>
         </div>
     )
 }

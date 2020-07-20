@@ -35,14 +35,16 @@ const GameEngine = ({ gameState }) => {
                     <DisplayWords prompt={prompt} player={player} gameID={_id} />
                 </div>
                 <div className="user-input">
+                    <br></br>
                     <InputForm isOpen={isOpen} isOver={isOver} gameID={_id} />
                     <br></br>
                     <StartButton player={player} gameID={_id} />
                 </div>
+                <Counter isOver={isOver} />
+
                 {isOpen ? <div className="user-input">
                                 <GameCode gameID={_id} />
                             </div> : null}
-                <Counter isOver={isOver} />
             </div>
             {isOver ? <GameReview gameState={gameState} /> : null}
         </div>
