@@ -2,8 +2,11 @@
 
 ## Available Scripts
 
+#### npm start
+Run in production mode
+
 #### npm run dev
-Run the development server start script
+Run the development server start script using nodemon
 
 #### npm start
 Run the development react server start script
