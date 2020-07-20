@@ -2,8 +2,14 @@ import React, {useState, useEffect} from 'react';
 
 import socket from '../../../socketConfig';
 
-const Counter = props => {
+const Counter = ({isOver}) => {
     const [timer, setTimer] = useState({countDown : "", msg : ""});
+    useEffect(() => {
+        socket.on('timer', (data) => {
+            setTimer(data);
+        });
+    })
+
     useEffect(() => {
         socket.on('timer', (data) => {
             setTimer(data);
@@ -13,12 +19,14 @@ const Counter = props => {
         })
     }, []);
 
-    const {countDown, msg} = timer;
+    const {countDown} = timer;
     return (
         <>
+            {!isOver ? 
             <div className="countdown-container">
                 <span className='countdown'>{countDown}</span>
             </div>
+            : null}
         </>
     )
 }

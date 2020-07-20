@@ -16,6 +16,8 @@ const CreateGame = props => {
         } else {
             setValid(false);
         }
+        console.log(nickName);
+
     }
     const onSubmit = e => {
         e.preventDefault();
@@ -32,7 +34,7 @@ const CreateGame = props => {
                         <Form.Group controlId="formBasicName">
                             <Form.Label>Nickname:</Form.Label>
                             <Form.Control type="text" name="nickname" placeholder="Enter your nickname"
-                                onChange={onChange} maxLength={15} />
+                                onChange={onChange} maxLength={10} />
                         </Form.Group>
                         <Button disabled={!valid} variant="primary" type="submit" onClick={onSubmit}>
                             Create Room

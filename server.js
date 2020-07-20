@@ -11,7 +11,7 @@ const mongoose = require('mongoose');
 
 const PORT = process.env.PORT;
 const server = app.listen(PORT, () => {
-    console.log(`server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });
 const io = socketio(server);
 
@@ -25,6 +25,64 @@ const QuoteRequest = require('./QuotableAPI');
 
 io.on('connect', (socket) => {
     console.log("CONNECTED");
+
+    socket.on('char-count', async ({corCharCnt, gameID}) => {
+        try {
+            let game = await Game.findById(gameID);
+            if (!game.isOpen && !game.isOver) {
+                let player = game.players.find(player => player.socketID === socket.id);
+                player.correctChars = corCharCnt;
+
+                let time = Date.now() - game.startTime;
+                let wpm = Math.round((player.correctChars / 5) / (time / 1000 / 60));
+                player.WPM = wpm;
+
+
+                if (player.correctChars === game.quoteLength) {
+                    player.isFinished = true;
+                    socket.emit('finished');
+
+                    let end = true;
+                    game.players.forEach((player) => {
+                        if (!player.isFinished) {
+                            end = false;
+                        }
+                    });
+                    if (end) {
+                        game.isOver = true;
+                    }
+                }
+
+                await game.save((err) => {
+                    if (err) {
+                        return console.log(err);
+                    }
+                });
+                io.to(gameID).emit('update-game', game);
+            }
+        } catch (error) {  
+            console.log(error);
+        }
+    });
+
+    socket.on('user-input', async ({gameID, userInput}) => {
+        try {
+            let game = await Game.findById(gameID);
+            if (!game.isOpen && !game.isOver) {
+                let player = game.players.find(player => player.socketID === socket.id);
+                player.input = userInput;
+                await game.save((err) => {
+                    if (err) {
+                        return console.log(err);
+                    }
+                });
+                io.to(gameID).emit('update-game', game);
+
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
 
     socket.on('timer', async ({gameID, playerID}) => {
         let countDown = 5;
@@ -41,7 +99,6 @@ io.on('connect', (socket) => {
                         if (err) {
                             return console.log(err);
                         }
-                        console.log('Success!');
                     });
                     
                     io.to(gameID).emit('update-game', game);
@@ -58,7 +115,6 @@ io.on('connect', (socket) => {
                 if (err) {
                     return console.log(err);
                 }
-                console.log(game);
             });
 
             let g = await Game.findById(_id).exec();
@@ -91,7 +147,10 @@ io.on('connect', (socket) => {
             const quotableData = await QuoteRequest();
 
             let game = new Game();
-            game.words = quotableData;
+            game.quote = quotableData.content;
+            game.author = quotableData.author;
+            game.words = quotableData.content.split(" ");
+            game.quoteLength = quotableData.length;
             let player = {
                 socketID: socket.id,
                 isPartyLeader: true,
@@ -125,14 +184,13 @@ const startGameClock = async (gameID) => {
         if (err) {
             return console.log(err);
         }
-        console.log('Success!');
     });
 
     let time = 120;
     let timerID = setInterval(function gameIntervalFunc() {
         if (time >= 0) {
             const formatTime = calculateTime(time);
-            io.to(gameID).emit('timer', {countDown : formatTime, msg : "Timer Remaining"});
+            io.to(gameID).emit('timer', {countDown : formatTime});
             time--;
         } else {
             (async () => {
@@ -149,7 +207,6 @@ const startGameClock = async (gameID) => {
                     if (err) {
                         return console.log(err);
                     }
-                    console.log('Success!');
                 });
                 io.to(gameID).emit('update-game', game);
                 clearInterval(timerID);

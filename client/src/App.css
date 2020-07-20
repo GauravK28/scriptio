@@ -103,21 +103,46 @@ div.progress-container {
   text-align: center !important;
 }
 
+div.player-info {
+  display: flex;
+  justify-content: space-between;
+}
 
+div.progress {
+  width: 75%;
+  height: 25px;
+  margin: auto;
+  background-color: darkgray;
+}
+
+@media all and (max-width: 1000px) {
+  div.progress {
+    width: 50%;
+
+  }
+}
 
 div.game-info {
   text-align: center;
 }
 
 p.WPM {
+  margin: 16px;
+  margin-left: auto;
+  margin-right: auto;
+
   float: right;
-  font-size: 26px;
+  font-size: 20px;
 }
 
+
 p.timer {
+  margin: 16px;
+  width: 102px;
   float: left;
-  font-size: 26px;
+  font-size: 20px;
 }
+
 
 span.countdown {
   color: red;

@@ -25,7 +25,7 @@ const JoinGame = props => {
                         <Form.Group controlId="formBasicName">
                             <Form.Label>Nickname:</Form.Label>
                             <Form.Control type="text" name="nickName" placeholder="Enter your nickname"
-                                onChange={onChange} maxLength={15} />
+                                onChange={onChange} maxLength={10} />
                             <br></br>
                             <Form.Label>Game ID:</Form.Label>
                             <Form.Control type="text" name="gameID" placeholder="Enter game ID"
