@@ -2,12 +2,12 @@
 **Author**: Gaurav Krishnan - [`gauravk2@illinois.edu`](mailto:example@illinois.edu)
 
 ## Project Goal
-This website is meant to create something similar to TypeRacer by providing a singleplayer and mutliplayer experience. Currently the mutliplayer only supports game room invite codes instead of search-based game creation. The website allows you to type race with other users you invite our play by yourself. This project mainly served as a tool for me to learn web development and how to use the MERN stack.
+I developed this website to create something similar to TypeRacer by providing type-racing via singleplayer and multiplayer. Currently, the mutliplayer only supports game room invite codes instead of search-based game creation. The website allows you to type race with other users you invite or play by yourself. This project mainly served as a tool for me to learn web development and how to use the MERN stack.
 
 Note: Quotes are fetched from [Quotable API](https://github.com/lukePeavey/quotable).
 ## Features
  - Singleplayer Mode
- - Multiplayer Mode (invite link method)
+ - Multiplayer Mode (invite-link method)
  - Game Review that displays quote and author
 
 ---
