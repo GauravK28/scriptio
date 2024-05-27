@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { InputGroup, FormControl, Form } from 'react-bootstrap';
+import { InputGroup, Form } from 'react-bootstrap';
 
 import socket from '../../../socketConfig';
 
@@ -33,7 +33,7 @@ const InputForm = ({ isOpen, isOver, gameID }) => {
 
     return (
         <InputGroup size="lg">
-            <FormControl readOnly={isOpen || isOver || userFinished}
+            <Form.Control readOnly={isOpen || isOver || userFinished}
                 autoFocus aria-label="Large" aria-describedby="inputGroup-sizing-sm"
                 placeholder="Start typing..."
                 ref={textInput} type="text" onChange={onChange} />

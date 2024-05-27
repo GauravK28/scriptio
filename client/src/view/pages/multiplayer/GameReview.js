@@ -20,7 +20,7 @@ const GameReview = ({ gameState }) => {
             <h5>Scoreboard</h5>
 
             <div className="game-review">
-                <Table classname="review-table" striped bordered responsive>
+                <Table className="review-table" striped bordered responsive>
                     <thead>
                         <tr>
                             <th>#</th>
@@ -28,7 +28,7 @@ const GameReview = ({ gameState }) => {
                             <th>WPM</th>
                         </tr>
                     </thead>
-                    <tbody> {
+                    <tbody>{
                         scoreBoard.map((player, index) => {
                             return <tr>
                                 <td>{index + 1}</td>

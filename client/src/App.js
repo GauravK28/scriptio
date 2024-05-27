@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import history from './history';
-import {Router, Route, Switch } from 'react-router-dom';
+import {Route, Routes, useNavigate } from 'react-router-dom';
 import './App.css'; // CSS stylesheet
 
 import NavBar from "./view/navbar";
@@ -18,6 +17,7 @@ import GameEngine from './view/pages/multiplayer/GameEngine';
 
 function App() {
   const [gameState, setGameState] = useState({ _id: "", isOpen: false, players: [], words: [] });
+  const navigate = useNavigate();
 
   useEffect(() => {
     socket.on('update-game', (game) => {
@@ -25,30 +25,28 @@ function App() {
       setGameState(game); // async event
     });
     return () => {
-      socket.removeAllListeners();
+      socket.off();
     }
   }, []);
   useEffect(() => {
     console.log(gameState._id);
     if (gameState._id !== "") {
-      history.push(`/game/${gameState._id}`);
+      navigate(`/game/${gameState._id}`);
     }
   }, [gameState._id]);
   return (
     <>
-    <Router history={history}>
       <NavBar />
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/game/create" component={CreateGame} />
-        <Route path="/game/join" component={JoinGame} />
-        <Route path="/game/:gameID" render={props => <GameEngine {...props } gameState={gameState}/>}/>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/game/create" element={<CreateGame />} />
+        <Route path="/game/join" element={<JoinGame />} />
+        <Route path="/game/:gameID" element={<GameEngine gameState={gameState} />} />
 
-        <Route path="/practice" component={Practice} />
-        <Route path="/profile" component={Profile} />
-        <Route path="/settings" component={Settings} />
-      </Switch>
-    </Router>
+        <Route path="/practice" element={<Practice />} />
+        <Route path="/profile" element={<Profile/>} />
+        <Route path="/settings" element={<Settings />} />
+      </Routes>
     </>
   )
 }

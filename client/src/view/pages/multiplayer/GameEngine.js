@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 import Counter from './Counter';
 import StartButton from './StartButton';
@@ -16,10 +16,9 @@ const GameEngine = ({ gameState }) => {
     const { _id, players, words, isOpen, isOver, quoteLength } = gameState;
     const player = players.find(player => player.socketID === socket.id);
     if (_id === "") {
-        return <Redirect to="/" />
+        return <Navigate to="/" />
     }
     const prompt = processWords(words);
-
     let currentPlayer = players.find(player => player.socketID === socket.id);
 
     return (

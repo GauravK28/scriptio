@@ -10,13 +10,13 @@ class LoginModal extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() { // componentWillReceiveProps is not recommend so using componentDidMount()
         this.setState({
             shouldModalOpen: this.props.shouldModalOpen,
         });
     }
 
-    componentWillReceiveProps(nextProps) {
+    componentDidUpdate(nextProps) { // componentWillReceiveProps is not recommend so using componentDidUpdate()
         if (this.props !== nextProps) {
             this.setState({
                 shouldModalOpen: nextProps.shouldModalOpen,

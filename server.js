@@ -1,15 +1,22 @@
 // npm run dev
 const express = require('express');
+const { createServer } = require('http')
+const { Server } = require('socket.io');
+
+const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer, { 
+    cors: {
+        origin:  '*',
+    }
+});
+
 const dotenv = require('dotenv');
 const path = require('path');
 // Load config
 dotenv.config({path : './config/config.env'})
 
-const app = express();
-
-const socketio = require('socket.io');
 const mongoose = require('mongoose');
-
 
 // serve static assets if in production
 if (process.env.NODE_ENV === 'production') {
@@ -21,15 +28,17 @@ if (process.env.NODE_ENV === 'production') {
     });
 }
 
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+})
+
 const PORT = process.env.PORT;
-const server = app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
     console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });
-const io = socketio(server);
 
 const connectDB = require('./config/db');
 connectDB();
-
 
 const Game = require('./Models/Game');
 const QuoteRequest = require('./QuotableAPI');
@@ -65,12 +74,11 @@ io.on('connect', (socket) => {
                     }
                 }
 
-                await game.save((err) => {
-                    if (err) {
-                        return console.log(err);
-                    }
-                });
-                io.to(gameID).emit('update-game', game);
+                await game.save()
+                    .then((savedGame) => {
+                        io.to(gameID).emit('update-game', savedGame);
+                    })
+                    .catch( err => console.log(err));
             }
         } catch (error) {  
             console.log(error);
@@ -83,13 +91,11 @@ io.on('connect', (socket) => {
             if (!game.isOpen && !game.isOver) {
                 let player = game.players.find(player => player.socketID === socket.id);
                 player.input = userInput;
-                await game.save((err) => {
-                    if (err) {
-                        return console.log(err);
-                    }
-                });
-                io.to(gameID).emit('update-game', game);
-
+                await game.save()
+                .then((savedGame) => {
+                    io.to(gameID).emit('update-game', savedGame);
+                })
+                .catch( err => console.log(err));
             }
         } catch (error) {
             console.log(error);
@@ -107,15 +113,13 @@ io.on('connect', (socket) => {
                     countDown--;
                 } else {
                     game.isOpen = false;
-                    await game.save((err) => {
-                        if (err) {
-                            return console.log(err);
-                        }
-                    });
-                    
-                    io.to(gameID).emit('update-game', game);
-                    startGameClock(gameID);
-                    clearInterval(timerID);
+                    await game.save()
+                    .then((savedGame) => {
+                        io.to(gameID).emit('update-game', savedGame);
+                        startGameClock(gameID);
+                        clearInterval(timerID);
+                    })
+                    .catch( err => console.log(err));
                 }
             }, 1000);
         }
@@ -123,15 +127,15 @@ io.on('connect', (socket) => {
 
     socket.on('join-game', async ({ gameID: _id, nickName }) => {
         try {
-            Game.find((err, game) => {
-                if (err) {
-                    return console.log(err);
-                }
-            });
+            // Game.find((err, game) => {
+            //     if (err) {
+            //         return console.log(err);
+            //     }
+            // });
 
             let g = await Game.findById(_id).exec();
 
-            if (g.isOpen) {
+            if (g && g.isOpen) {
                 const gameID = g._id.toString();
                 socket.join(gameID);
                 let player = {
@@ -140,14 +144,13 @@ io.on('connect', (socket) => {
                     nickName
                 }
                 g.players.push(player);
-                g.save(function (err) {
-                    if (err) {
-                        return console.log(err);
-                    }
-                    console.log('Success!');
-                });
-                io.to(gameID).emit('update-game', g);
-                console.log("PLAYER JOINED");
+                
+                await g.save()
+                .then((savedGame) => {
+                    io.to(gameID).emit('update-game', savedGame);
+                    console.log("PLAYER JOINED");
+                })
+                .catch( err => console.log(err));
             }
         } catch (error) {
             console.log(error);
@@ -155,6 +158,7 @@ io.on('connect', (socket) => {
     });
 
     socket.on('create-game', async (nickName) => {
+        console.log('Creating game...');
         try {
             const quotableData = await QuoteRequest();
 
@@ -169,19 +173,17 @@ io.on('connect', (socket) => {
                 nickName
             }
             game.players.push(player);
-            //game = await game.save();
-            await game.save((err) => {
-                if (err) {
-                    return console.log(err);
-                }
-                console.log('Success!');
-            });
 
-            const gameID = game._id.toString();
-            console.log(game._id);
-            socket.join(gameID);
-            io.to(gameID).emit('update-game', game);
-            console.log("GAME WAS CREATED");
+            await game.save()
+            .then((savedGame) => {
+                const gameID = savedGame._id.toString();
+                console.log(savedGame._id);
+                socket.join(gameID);
+                io.to(gameID).emit('update-game', savedGame);
+                console.log("GAME WAS CREATED");
+            })
+            .catch( err => console.log(err));
+
         } catch (error) {
             console.log(error);
         }
@@ -192,11 +194,9 @@ io.on('connect', (socket) => {
 const startGameClock = async (gameID) => {
     let game = await Game.findById(gameID).exec();
     game.startTime = new Date().getTime();
-    await game.save((err) => {
-        if (err) {
-            return console.log(err);
-        }
-    });
+    await game.save()
+    .then(console.log('Successfully started game.'))
+    .catch( err => console.log(err));;
 
     let time = 120;
     let timerID = setInterval(function gameIntervalFunc() {
@@ -215,11 +215,10 @@ const startGameClock = async (gameID) => {
                         game.players[index].WPM = calculateWPM(endTime, startTime, player);
                     }
                 });
-                await game.save((err) => {
-                    if (err) {
-                        return console.log(err);
-                    }
-                });
+                await game.save()
+                .then(console.log('Successfully updated player wpm.'))
+                .catch( err => console.log(err));
+
                 io.to(gameID).emit('update-game', game);
                 clearInterval(timerID);
             })()

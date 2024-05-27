@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { InputForm, FormControl, Button, InputGroup, Alert } from 'react-bootstrap';
+import { Form, Button, InputGroup, Alert } from 'react-bootstrap';
 import { Transition } from 'react-transition-group';
 
 
@@ -32,21 +32,17 @@ const GameCode = ({ gameID }) => {
     return (
         <>
             <InputGroup className="mb-3">
-                <FormControl
+                <Form.Control
                     readOnly type="text" ref={textInputRef} value={gameID}
                     aria-label="Recipient's username"
                     aria-describedby="basic-addon2"
                 />
-                <InputGroup.Append>
-                    <Button type="button" variant="outline-success" onClick={copyToClipboard}>Copy Game Code</Button>
-                </InputGroup.Append>
+                <Button type="button" variant="outline-success" onClick={copyToClipboard}>Copy Game Code</Button>
             </InputGroup>
 
             {copySuccess ?
             <Alert variant="success">Copied!</Alert>
             : null}
-
-
         </>
     )
 }
